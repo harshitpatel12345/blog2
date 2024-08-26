@@ -1,0 +1,69 @@
+{% extends 'base.html'%}
+{% load static %}
+{% block css %}
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    .blog-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+    .blog-item {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        width: 100%;
+        max-width: 300px;
+        padding: 15px;
+        box-sizing: border-box;
+    }
+    .blog-item h2 {
+        margin-top: 0;
+    }
+    .blog-item a {
+        text-decoration: none;
+        color: #333;
+    }
+    .blog-item a:hover {
+        text-decoration: underline;
+    }
+    .blog-item p {
+        margin: 10px 0;
+    }
+
+{% endblock %}
+{% block content %}
+    <main>
+        <div class="container">
+            <section class="blog-list">
+                {% if blogs %}
+                    {% for blog in blogs %}
+                        <div class="blog-item">
+                            <h2><a href="{% url 'blog_list'%}">{{ blog.title }}</a></h2>
+                            <p><strong>By:</strong> {{ blog.author.username }}</p>
+                            {% if blog.image %}
+                            <img src="{{ blog.image.url }}" alt="{{ blog.title }}">
+                            {% endif %}
+                            <p class="created_at">Published on {{ blog.created_at }}</p>
+                            <div class="content">
+                                {{ blog.content|safe }}
+                                <a href="{% url 'update_blog' blog.id %}"><button class="btn-primary">UPDATE</button></a>
+                                <a href="{% url 'delete_blog' blog.id %}"><button class="btn-primary">Delete</button></a>
+
+                            </div>
+                             
+                        </div>
+
+                    {% endfor %}
+                {% else %}
+                    <p>No blogs available.</p>
+                {% endif %}
+            </section>
+        </div>
+    </main>
+    {% endblock %}
+
